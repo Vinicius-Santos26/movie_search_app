@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import SearchMovie from "./components/searchMovie";
+import MoviesList from "./components/moviesList";
+import { fetchData } from "./services/api";
 
-function App() {
+const App = () => {
+  const [movies, setMovies] = useState([]);
+  const searchMovies = async (query) => {
+    try {
+      const fetchedData = await fetchData(query);
+      setMovies(fetchedData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <h1 className="title">React Movie Search</h1>
+      <SearchMovie searchMovies={searchMovies} />
+      <MoviesList moviesList={movies} />
     </div>
   );
-}
+};
 
 export default App;
